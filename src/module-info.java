@@ -1,0 +1,3 @@
+module SymbolicDifferentiation {
+		exports differentiation;
+}
