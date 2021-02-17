@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class PolishParser {
-	private int decision_matrix[][];
 	
 	public void parse(String expression)
 	{
@@ -18,6 +17,7 @@ public class PolishParser {
 		
 		List<String> tmp_buffer = Arrays.asList(partial_expressions);
 		List<String> l = tmp_buffer.stream().filter(Pattern.compile("[^\\s\\(\\)]+").asPredicate()).collect(Collectors.toList());
+
 		arithmethicSimplifier(l);
 		
 		/*long literals = Pattern.compile("(?<!\\S)([a-zA-z]{1})").matcher(expression).results().count();
@@ -28,22 +28,59 @@ public class PolishParser {
 	}
 	private void arithmethicSimplifier(List<String> expressions)
 	{
-		int i;
+		int i, state = 0;
 		for( i = 0; i < expressions.size(); i++ )
 		{
-			switchingLevel1(expressions.get(i));
+			state = switchingLogic(expressions.get(i), state);
 		}
 	}
-	private void switchingLevel1(String expression)
+	private int switchingLogic(String expression, int state)
 	{
+		int new_state = -1;
+		switch (state)
+		{
+			case 0: //initial
+				new_state = initialStateLogic(expression);
+				break;
+			case 1: //operator
+				break;
+			case 2: //function
+				break;
+			case 3:
+			
+				break;
+		}	
+		
+		return new_state;
+	}
+	private int initialStateLogic(String expression)
+	{
+		//operator
 		if( Pattern.compile("[+-/*^]").matcher(expression).matches() )
 		{
-			
-		}
+			return 1;
+		}//function
 		else if ( Pattern.compile("cos|sin|tan|cot|exp").matcher(expression).matches() )
 		{
-			
+			return 2;
 		}
+		return -1;
 	}
-	
+	private int operatorLogic(String expression)
+	{
+		//variable
+		if( Pattern.compile("[a-zA-Z]").matcher(expression).matches() )
+		{
+			return 3;
+		}//constant
+		else if( Pattern.compile("[0-9]").matcher(expression).matches() )
+		{
+			return 4;
+		}//another operator
+		else if( Pattern.compile("[+-/*^]").matcher(expression).matches() )
+		{
+			return 5;
+		}
+		return -1;
+	}
 }
