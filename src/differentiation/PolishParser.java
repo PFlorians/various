@@ -46,9 +46,6 @@ public class PolishParser {
 				break;
 			case 2: //function
 				break;
-			case 3:
-			
-				break;
 		}	
 		
 		return new_state;
@@ -76,7 +73,7 @@ public class PolishParser {
 		else if( Pattern.compile("[0-9]").matcher(expression).matches() )
 		{
 			return 4;
-		}//another operator
+		}//another operator, could be likely a bracket as a left operand
 		else if( Pattern.compile("[+-/*^]").matcher(expression).matches() )
 		{
 			return 5;
