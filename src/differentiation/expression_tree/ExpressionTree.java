@@ -6,7 +6,7 @@ import binary_tree.BinaryTree;
 import binary_tree.BinaryTreeException;
 import binary_tree.Node;
 
-public class ExpressionTree<BT, V> implements BinaryTree<BT, V> 
+public class ExpressionTree implements BinaryTree
 {
 	private ExpressionNode<String, Integer> root_node;
 	
@@ -14,9 +14,9 @@ public class ExpressionTree<BT, V> implements BinaryTree<BT, V>
 	{
 		root_node = new ExpressionNode<String, Integer>();
 	}
-	public ExpressionTree(Integer value)
+	public ExpressionTree( Integer value, String expression )
 	{
-		root_node = new ExpressionNode<String, Integer>(value);
+		root_node = new ExpressionNode<String, Integer>( value, expression );
 	}
 	public ExpressionTree(ExpressionNode<String, Integer> root)
 	{
@@ -24,7 +24,7 @@ public class ExpressionTree<BT, V> implements BinaryTree<BT, V>
 	}
 	
 	@Override
-	public BinaryTree<BT, V> add(Node<?> n) throws Exception 
+	public BinaryTree add(Node<?> n) throws Exception 
 	{
 		ExpressionNode<String, Integer> en = null;
 		
@@ -38,7 +38,7 @@ public class ExpressionTree<BT, V> implements BinaryTree<BT, V>
 		}
 		if( en.get_value() == null )
 		{
-			throw new BinaryTreeException().ValueNotInitialized();
+			throw new BinaryTreeException().valueNotInitialized();
 		}
 		if( root_node == null )
 		{
@@ -51,7 +51,7 @@ public class ExpressionTree<BT, V> implements BinaryTree<BT, V>
 		return this;
 	}
 	@Override
-	public BinaryTree<BT, V> remove(Node<?> n) 
+	public BinaryTree remove(Node<?> n) 
 	{
 		// TODO 
 		return null;
@@ -64,31 +64,31 @@ public class ExpressionTree<BT, V> implements BinaryTree<BT, V>
 	
 	private void insert_node(ExpressionNode<String, Integer> start, ExpressionNode<String, Integer> n)
 	{
-		if( start.get_value() <= n.get_value() )
+		if( start.get_right_child() == null && start.get_left_child() != null &&
+			((ExpressionNode<String, Integer>)start).get_value() < n.get_value() )
 		{
-			if( start.get_right_child() != null )
-			{
-				insert_node( (ExpressionNode<String, Integer>)start.get_right_child(), n );
-			}
-			else
-			{
-				n.set_parent(start);
-				start.set_right_child(n);
-				return;
-			}
+			n.set_parent(start);
+			start.set_right_child(n);
+			return;
 		}
-		else
+		else if( start.get_right_child() == null && start.get_left_child() != null &&
+				((ExpressionNode<String, Integer>)start).get_value() == n.get_value() )
 		{
-			if( start.get_left_child() != null )
-			{
-				insert_node( (ExpressionNode<String, Integer>)start.get_left_child(), n );
-			}
-			else
-			{
-				n.set_parent(start);
-				start.set_left_child(n);
-				return;
-			}
+			insert_node( (ExpressionNode<String, Integer>)start.get_right_child(), n );
+		}
+		else if( start.get_right_child() == null && start.get_left_child() == null &&
+				((ExpressionNode<String, Integer>)start).get_value() == n.get_value() )
+		{
+			n.set_parent(start);
+			start.set_left_child(n);
+			return;
+		}
+		else if( start.get_right_child() == null && start.get_left_child() == null &&
+				((ExpressionNode<String, Integer>)start).get_value() < n.get_value() )
+		{
+			n.set_parent(start);
+			start.set_left_child(n);
+			return;
 		}
 	}
 	

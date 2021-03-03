@@ -9,15 +9,17 @@ public class ExpressionNode<N, V> implements Node<N> {
 	private boolean was_visited;
 	private UUID node_id;
 	private V value;
+	private N expression;
 	
 	public ExpressionNode()
 	{
 		was_visited = false;
 		node_id = UUID.randomUUID();
 	}
-	public ExpressionNode( V value )
+	public ExpressionNode( V value, N expression )
 	{
 		this.value = value;
+		this.expression = expression;
 		was_visited = false;
 		node_id = UUID.randomUUID();
 	}
@@ -90,9 +92,17 @@ public class ExpressionNode<N, V> implements Node<N> {
 	{
 		return value;
 	}
-	public void set_value(V input) 
+	public N get_expression()
+	{
+		return expression;
+	}
+	public void set_value( V input ) 
 	{
 		value = input;
+	}
+	public void set_operator( N expression )
+	{
+		this.expression = expression;
 	}
 	
 	/************************************/
